@@ -5,20 +5,20 @@ const demos = [
   {
     name: 'Lumina Beauty Lounge',
     type: 'Beauty & Wellness',
-    url: '#',
-    placeholder: true,
+    url: 'https://3-js-demo-site-1.vercel.app/',
+    placeholder: false,
   },
   {
     name: 'Elite Build Services',
     type: 'Construction & Trade',
-    url: '#',
-    placeholder: true,
+    url: 'https://3-js-demo-site-2.vercel.app/',
+    placeholder: false,
   },
   {
     name: 'The Corner Café',
     type: 'Food & Hospitality',
-    url: '#',
-    placeholder: true,
+    url: 'https://3-js-demo-site-3.vercel.app/',
+    placeholder: false,
   },
 ]
 
@@ -64,10 +64,11 @@ export default function Portfolio() {
                     <span className="text-xs tracking-wider uppercase">Coming Soon</span>
                   </div>
                 ) : (
-                  <img
-                    src={`/demos/${name.toLowerCase().replace(/\s+/g, '-')}.webp`}
-                    alt={`${name} website preview`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  <iframe
+                    src={url}
+                    title={`${name} preview`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none border-none"
+                    scrolling="no"
                   />
                 )}
 
