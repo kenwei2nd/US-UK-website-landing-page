@@ -68,6 +68,7 @@ export default function Portfolio() {
                     <iframe
                       src={url}
                       title={`${name} preview`}
+                      loading="lazy"
                       style={{
                         width: '600%',
                         height: '600%',
