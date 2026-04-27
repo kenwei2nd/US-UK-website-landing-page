@@ -15,8 +15,8 @@ function App() {
       <Hero />
       <IndustriesServed />
       <Features />
-      <Offer />
       <Portfolio />
+      <Offer />
       <FAQ />
       <FooterCTA />
       <WhatsAppFloat />

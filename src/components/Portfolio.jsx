@@ -64,12 +64,21 @@ export default function Portfolio() {
                     <span className="text-xs tracking-wider uppercase">Coming Soon</span>
                   </div>
                 ) : (
-                  <iframe
-                    src={url}
-                    title={`${name} preview`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none border-none"
-                    scrolling="no"
-                  />
+                  <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700 pointer-events-none overflow-hidden">
+                    <iframe
+                      src={url}
+                      title={`${name} preview`}
+                      style={{
+                        width: '600%',
+                        height: '600%',
+                        transform: 'scale(0.166667)',
+                        transformOrigin: '0 0',
+                        border: 'none',
+                      }}
+                      scrolling="no"
+                      tabIndex="-1"
+                    />
+                  </div>
                 )}
 
                 {/* Overlay on hover */}
