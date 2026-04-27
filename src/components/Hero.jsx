@@ -396,10 +396,10 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    // Normalize scroll on touch devices for iOS momentum scrolling
-    if ('ontouchstart' in window) {
-      ScrollTrigger.normalizeScroll(true)
-    }
+    // Removed normalizeScroll as it can cause an 'auto-scrolling' or hijacked feel on mobile
+    // if ('ontouchstart' in window) {
+    //   ScrollTrigger.normalizeScroll(true)
+    // }
 
     const timeout = setTimeout(() => {
       const ctx = gsap.context(() => {
@@ -407,9 +407,18 @@ export default function Hero() {
         if (frames.length === 0) return
 
         const mob = window.innerWidth < 768
-        // Reduced depth values on mobile (40% reduction)
-        const zFar = mob ? -1200 : -2000
-        const zPast = mob ? 300 : 500
+
+        // If mobile, disable the scroll animation entirely and show a static hero
+        if (mob) {
+          gsap.set(frames[0], { z: -50, scale: 0.95, opacity: 0.15, rotateX: 0 })
+          frames.slice(1).forEach(f => gsap.set(f, { display: 'none' }))
+          gsap.set(heroContentRef.current, { opacity: 1, scale: 1, y: 0 })
+          gsap.set(progressBarRef.current, { display: 'none' })
+          return // Skip timeline creation
+        }
+
+        const zFar = -2000
+        const zPast = 500
 
         /* ── initial states ───────────── */
         gsap.set(frames[0], { z: mob ? -180 : -300, scale: 0.88, opacity: 0.95, rotateX: 3 })
@@ -470,7 +479,7 @@ export default function Hero() {
   const perspective = isMobile ? '800px' : '1200px'
 
   return (
-    <section id="hero" ref={outerRef} className="relative" style={{ height: '600vh' }}>
+    <section id="hero" ref={outerRef} className="relative" style={{ height: isMobile ? '100vh' : '600vh', minHeight: isMobile ? '600px' : 'auto' }}>
       {/* Pinned viewport */}
       <div ref={pinnedRef} className="h-screen w-full overflow-hidden flex items-center justify-center relative">
         {/* BG — radial gold glow */}
@@ -505,11 +514,12 @@ export default function Hero() {
         </div>
 
         {/* ── SCROLL indicator ── */}
-        <div
-          ref={scrollIndicatorRef}
-          className="absolute left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1"
-          style={{ bottom: isMobile ? 16 : 36 }}
-        >
+        {!isMobile && (
+          <div
+            ref={scrollIndicatorRef}
+            className="absolute left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1"
+            style={{ bottom: 48 }}
+          >
           <motion.span
             style={{
               fontSize: isMobile ? 9 : 10,
@@ -530,9 +540,10 @@ export default function Hero() {
             className="flex flex-col items-center -space-y-1.5"
           >
             <ChevronDown style={{ width: isMobile ? 14 : 16, height: isMobile ? 14 : 16, color: '#d4af37', opacity: 0.45 }} />
-            <ChevronDown style={{ width: isMobile ? 14 : 16, height: isMobile ? 14 : 16, color: '#d4af37' }} />
+            <ChevronDown style={{ width: 16, height: 16, color: '#d4af37' }} />
           </motion.div>
         </div>
+        )}
 
         {/* ── Hero content (revealed after all frames) ── */}
         <div ref={heroContentRef} className="absolute inset-0 flex flex-col items-center justify-center z-20 px-5 sm:px-6">
